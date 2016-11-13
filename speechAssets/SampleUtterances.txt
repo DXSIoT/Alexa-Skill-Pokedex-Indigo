@@ -1,0 +1,8 @@
+AskInformationIntent tell me info about {Pokemon}
+AskInformationIntent tell me about {Pokemon}
+AskInformationIntent information about {Pokemon}
+AskInformationIntent info about {Pokemon}
+AskInformationIntent about {Pokemon}
+AskInformationIntent for {Pokemon}
+AskInformationIntent who is {Pokemon}
+

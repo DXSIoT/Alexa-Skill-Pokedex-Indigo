@@ -1,0 +1,29 @@
+{
+  "name": "alexa-sill-pokedex-indigo",
+  "version": "1.0.0",
+  "description": "Pokedex (Indigo League) Alexa Skill",
+  "main": "index.js",
+  "dependencies": {
+    "sync-request": "^3.0.0"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/DXSIoT/Alexa-Skill-Pokedex-Indigo.git"
+  },
+  "keywords": [
+    "pokemon",
+    "pokedex",
+    "alexa",
+    "amazon"
+  ],
+  "author": "Laurence HR (http://daxes.net/)",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/DXSIoT/Alexa-Skill-Pokedex-Indigo/issues"
+  },
+  "homepage": "https://github.com/DXSIoT/Alexa-Skill-Pokedex-Indigo#readme"
+}
