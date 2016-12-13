@@ -22,7 +22,7 @@
 'use strict';
 
 var AlexaSkill = require('./AlexaSkill'),
-    pokemons = require('./pokemons');
+    pokes = require('./pokes');
 
 var request = require('sync-request');
 
@@ -43,7 +43,7 @@ Pokedex.prototype = Object.create(AlexaSkill.prototype);
 Pokedex.prototype.constructor = Pokedex;
 
 Pokedex.prototype.eventHandlers.onLaunch = function (launchRequest, session, response) {
-    var speechText = "Welcome to the Pokedex. You can ask for Pokemon information.";
+    var speechText = "Welcome to the Unofficial Pokedex. You can ask for information about a Pokemon.";
     // If the user either does not reply to the welcome message or says something that is not
     // understood, they will be prompted again with this text.
     var repromptText = "For instructions on what you can say, please say help me.";
@@ -52,14 +52,14 @@ Pokedex.prototype.eventHandlers.onLaunch = function (launchRequest, session, res
 
 Pokedex.prototype.intentHandlers = {
     "AskInformationIntent": function (intent, session, response) {
-        var itemSlot = intent.slots.Pokemon,
+        var itemSlot = intent.slots.Poke,
             itemName;        
         if (itemSlot && itemSlot.value){
             itemName = itemSlot.value.toLowerCase();            
         }
         
         var cardTitle = "Information for " + itemName,
-            pokeid = pokemons[itemName],
+            pokeid = pokes[itemName],
             speechOutput,
             repromptOutput;
         if (pokeid) {
@@ -109,7 +109,7 @@ Pokedex.prototype.intentHandlers = {
                 }
 
             } catch (err) {
-              speech+= ' There was an error getting information from the Pokemon API. Try again later or try another pokemon.'
+              speech+= ' There was an error getting information from the Pokemon API. Try again later or try another Pokemon.'
             }
 
             speechOutput = {
@@ -148,8 +148,8 @@ Pokedex.prototype.intentHandlers = {
     },
 
     "AMAZON.HelpIntent": function (intent, session, response) {
-        var speechText = "You can ask for Pokemon information, only says the Pokemon's name... Information for " + Object.keys(pokemons).length + " available";
-        var repromptText = "You can ask for Pokemon information, only says the Pokemon's name... Information for " + Object.keys(pokemons).length + " available";
+        var speechText = "You can ask for Pokemon information, only says the Pokemon's name... Information for " + Object.keys(pokes).length + " available";
+        var repromptText = "You can ask for Pokemon information, only says the Pokemon's name... Information for " + Object.keys(pokes).length + " available";
         var speechOutput = {
             speech: speechText,
             type: AlexaSkill.speechOutputType.PLAIN_TEXT
