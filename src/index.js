@@ -51,7 +51,7 @@ Pokedex.prototype.eventHandlers.onLaunch = function (launchRequest, session, res
 };
 
 Pokedex.prototype.intentHandlers = {
-    "AskInformationIntent": function (intent, session, response) {
+    "PokemonIntent": function (intent, session, response) {
         var itemSlot = intent.slots.Poke,
             itemName;        
         if (itemSlot && itemSlot.value){
@@ -69,7 +69,7 @@ Pokedex.prototype.intentHandlers = {
 
             try {
                 ////
-                var url_api = 'http://pokeapi.co/api/v2/pokemon/'+ pokeid +'/';
+                var url_api = 'http://pokeapi.co/api/v1/pokemon/'+ pokeid +'/';
                 var res = request('GET', url_api );
                 var data = JSON.parse(res.getBody('utf8'));
                 
@@ -78,12 +78,12 @@ Pokedex.prototype.intentHandlers = {
 
                 var poke_types = [];var x;
                 if(types && types.length>0) for(x in types){
-                    var type_name = types[x].type.name;                
+                    var type_name = types[x].name;                
                     poke_types.push(type_name);
                 }
                 var poke_abilities = [];var y;
                 if(abilities && abilities.length>0) for(y in abilities){
-                    var abilitie_name = abilities[y].ability.name;
+                    var abilitie_name = abilities[y].name;
                     poke_abilities.push(abilitie_name);
                 }
                 ////            
@@ -136,7 +136,43 @@ Pokedex.prototype.intentHandlers = {
         }
         
     },
+    "PokemonNumberIntent": function (intent, session, response) {
+        var itemSlot = intent.slots.Poke,
+            itemName;        
+        if (itemSlot && itemSlot.value){
+            itemName = itemSlot.value.toLowerCase();            
+        }
+        
+        var cardTitle = "Information for " + itemName,
+            pokeid = pokes[itemName],
+            speechOutput,
+            repromptOutput;
+        if (pokeid) {
+            var speech = 'This pokemon is the number ' + pokeid;
 
+            speechOutput = {
+                speech: speech,
+                type: AlexaSkill.speechOutputType.PLAIN_TEXT
+            };
+            response.tellWithCard(speechOutput, cardTitle, speech);
+        } else {
+            var speech;
+            if (itemName) {
+                speech = "I'm sorry, I currently do not have information for " + itemName + ". What else can I help with?";
+            } else {
+                speech = "I'm sorry, I currently do not know that Pokemon. What else can I help with?";
+            }
+            speechOutput = {
+                speech: speech,
+                type: AlexaSkill.speechOutputType.PLAIN_TEXT
+            };
+            repromptOutput = {
+                speech: "What else can I help with?",
+                type: AlexaSkill.speechOutputType.PLAIN_TEXT
+            };
+            response.ask(speechOutput, repromptOutput);
+        }
+    },
     "AMAZON.StopIntent": function (intent, session, response) {
         var speechOutput = "Goodbye";
         response.tell(speechOutput);

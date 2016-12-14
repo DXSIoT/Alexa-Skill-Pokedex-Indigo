@@ -1,15 +1,24 @@
 {
   "intents": [
     {
-      "intent": "AskInformationIntent",
+      "intent": "PokemonIntent",
       "slots": [
       {
-        "name" : "Pokemon",
-        "type": "LIST_OF_POKEMONS"
+        "name" : "Poke",
+        "type": "LIST_OF_POKES"
       }
      ]
     },
-   {
+    {
+      "intent": "PokemonTypeIntent",
+      "slots": [
+      {
+        "name" : "Poke",
+        "type": "LIST_OF_POKES"
+      }
+     ]
+    },
+    {
       "intent": "AMAZON.HelpIntent"
     },
     {
@@ -20,3 +29,4 @@
     }
   ]
 }
+
