@@ -1,3 +1,8 @@
-PokemonNumberIntent for {Poke}
-PokemonNumberIntent about {Poke}
+PokemonIntent information of {Poke}
+PokemonIntent information about {Poke}
+PokemonIntent for {Poke}
+PokemonIntent about {Poke}
 PokemonNumberIntent what number is {Poke}
+PokemonNumberIntent {Poke} number
+PokemonTypeIntent what type is {Poke}
+PokemonTypeIntent {Poke} type

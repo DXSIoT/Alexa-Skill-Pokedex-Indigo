@@ -1,10 +1,11 @@
 var request = require('sync-request');
 
-var url_api = 'http://pokeapi.co/api/v1/pokemon/charmander/';
+//var url_api = 'http://pokeapi.co/api/v1/pokemon/charmander/';
+var url_api = 'http://159.203.183.182/pokeapi/pokemon/2';
 var res = request('GET', url_api );
 var data = JSON.parse(res.getBody('utf8'));
 
-var forms = data.forms;
+//var forms = data.forms;
 var types = data.types;
 var abilities = data.abilities;
 
@@ -20,7 +21,7 @@ for(y in abilities){
 	poke_abilities.push(abilitie_name);
 }
 
-var poke_name = forms[0].name;
+var poke_name = data.name;
 
 console.log('poke_name: ' + poke_name);
 console.log('poke_types: '+ poke_types);

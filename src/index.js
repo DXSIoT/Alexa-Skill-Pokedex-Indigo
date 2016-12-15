@@ -69,7 +69,8 @@ Pokedex.prototype.intentHandlers = {
 
             try {
                 ////
-                var url_api = 'http://pokeapi.co/api/v1/pokemon/'+ pokeid +'/';
+                //var url_api = 'http://pokeapi.co/api/v1/pokemon/'+ pokeid +'/';
+                var url_api = 'http://159.203.183.182/pokeapi/pokemon/'+ pokeid +'/';
                 var res = request('GET', url_api );
                 var data = JSON.parse(res.getBody('utf8'));
                 
@@ -106,6 +107,74 @@ Pokedex.prototype.intentHandlers = {
                     speech+= ' has only one ability: ' + poke_abilities.join(',') + '.';
                 }else{
                     speech+= ' has '+ poke_abilities.length +' abilites: ' + poke_abilities.join(',') + '.';
+                }
+
+            } catch (err) {
+              speech+= ' There was an error getting information from the Pokemon API. Try again later or try another Pokemon.'
+            }
+
+            speechOutput = {
+                speech: speech,
+                type: AlexaSkill.speechOutputType.PLAIN_TEXT
+            };
+            response.tellWithCard(speechOutput, cardTitle, speech);
+        } else {
+            var speech;
+            if (itemName) {
+                speech = "I'm sorry, I currently do not have information for " + itemName + ". What else can I help with?";
+            } else {
+                speech = "I'm sorry, I currently do not know that Pokemon. What else can I help with?";
+            }
+            speechOutput = {
+                speech: speech,
+                type: AlexaSkill.speechOutputType.PLAIN_TEXT
+            };
+            repromptOutput = {
+                speech: "What else can I help with?",
+                type: AlexaSkill.speechOutputType.PLAIN_TEXT
+            };
+            response.ask(speechOutput, repromptOutput);
+        }
+        
+    },
+    "PokemonTypeIntent": function (intent, session, response) {
+        var itemSlot = intent.slots.Poke,
+            itemName;        
+        if (itemSlot && itemSlot.value){
+            itemName = itemSlot.value.toLowerCase();            
+        }
+        
+        var cardTitle = "Information for " + itemName,
+            pokeid = pokes[itemName],
+            speechOutput,
+            repromptOutput;
+        if (pokeid) {
+            //var speech = 'This pokemon is the number ' + pokeid;
+            var speech = itemName;
+            try {
+                ////
+                //var url_api = 'http://pokeapi.co/api/v1/pokemon/'+ pokeid +'/';
+                var url_api = 'http://159.203.183.182/pokeapi/pokemon/'+ pokeid +'/types';
+                var res = request('GET', url_api );
+                var data = JSON.parse(res.getBody('utf8'));
+                
+                var types = data.types;
+
+                var poke_types = [];var x;
+                if(types && types.length>0) for(x in types){
+                    var type_name = types[x].name;                
+                    poke_types.push(type_name);
+                }
+                ////            
+
+                speech+= ' ';
+                if(poke_types.length==0){
+                    speech+= ' has no type.';
+                }else 
+                if(poke_types.length==1){
+                    speech+= ' is type ' + poke_types.join(' and ') + '.';
+                }else{
+                    speech+= ' is type ' + poke_types.join(' and ') + '.';
                 }
 
             } catch (err) {
