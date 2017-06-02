@@ -4,6 +4,8 @@
   "description": "Pokedex (Indigo League) Alexa Skill",
   "main": "index.js",
   "dependencies": {
+    "alexa-app": "^4.0.1",
+    "dotenv": "^4.0.0",
     "sync-request": "^3.0.0"
   },
   "devDependencies": {},
