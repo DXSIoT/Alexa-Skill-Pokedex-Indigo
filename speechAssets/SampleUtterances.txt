@@ -6,3 +6,7 @@ PokemonNumberIntent what number is {Poke}
 PokemonNumberIntent {Poke} number
 PokemonTypeIntent what type is {Poke}
 PokemonTypeIntent {Poke} type
+PokemonEvolutionIntent in which evolves {Poke}
+PokemonEvolutionIntent in which pokemon evolves {Poke}
+PokemonEvolutionIntent evolution of {Poke}
+PokemonEvolutionIntent evolves {Poke}
