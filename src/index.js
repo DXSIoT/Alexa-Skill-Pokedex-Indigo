@@ -7,36 +7,40 @@ var pokes = require('./pokes');
 
 var app = new alexa.app("Unofficial-Pokedex");
 var HOST_API = process.env.HOST_API;
+var HOST_SPRITES = process.env.HOST_SPRITES;
 var APP_ID = process.env.APP_ID;
 
 app.launch(function(request, response) {
   //response.shouldEndSession(false);
-  return response.card("Welcome to the Unofficial Pokedex. You can ask for information about a Pokemon.")
-  				 .say("For instructions on what you can say, please say help me.")
-  				 .shouldEndSession(false)
-  				 .send();
+    //return 
+    response
+        .card("Welcome to the Unofficial Pokedex","You can ask for information about a Pokemon.");
+    response
+        .say("For instructions on what you can say, please say help me.")
+        .shouldEndSession(false)
+        .send();
 });
 
-app.intent("AMAZON.StopIntent",{"slots": {},"utterances": []},
+app.intent("AMAZON.StopIntent",
 	function(request, response){
-		return
+		
 		response
 			.say("Goodbye")
 			.send();
 	});
 
-app.intent("AMAZON.CancelIntent",{"slots": {},"utterances": []},
+app.intent("AMAZON.CancelIntent",
 	function(request, response){
-		return
+		
 		response
 			.say("Goodbye")
 			.send();
 	});
 
 
-app.intent("AMAZON.HelpIntent",{"slots": {},"utterances": []},
+app.intent("AMAZON.HelpIntent",
 	function(request, response){
-		return
+		
 		response
 			.say("You can ask for Pokemon information, only says the Pokemon's name... Information for " + Object.keys(pokes).length + " available")
 			.shouldEndSession(false)
@@ -95,17 +99,20 @@ app.intent("PokemonIntent",
 			text: speech		
 		};
 
-		if(pokeid){
-			card.image = {smallImageUrl: pokemonImageFront(pokeid)};
+		if(pokeid){			
+            card.image = 
+            {
+                smallImageUrl: pokemonImageFront(poke_evolved.id),
+                largeImageUrl: pokemonImageFront(poke_evolved.id)
+            };
 		}
 
         response
-        	.card(card)
-			.shouldEndSession(false);	
-
-		return
+        	.card(card);	
+		
 		response
 			.say(speech)
+            .shouldEndSession(false)
 			.send();
 	}
 );
@@ -135,14 +142,14 @@ app.intent("PokemonTypeIntent",
             try {                
                 json = getApiResponse(HOST_API + '/pokemon/'+ pokeid);                
                 if(json.error){
-                	speech+= ' There was an error getting information of these Pokemon . Try again with another.'
+                	speech+= 'There was an error getting information of these Pokemon . Try again with another.'
                 }else{
                 	speech = itemName
                 	var data = json.data;	               	               	                
 	                speech+= ' ' + buildTypeSpeech(data.types);	                
                 }                
             } catch (err) { //throw err;
-            	speech+= ' There was an error getting information from the Pokemon API. Try again later or try another Pokemon.'
+            	speech+= 'There was an error getting information from the Pokemon API. Try again later or try another Pokemon.'
             }
 
         }else{
@@ -153,15 +160,17 @@ app.intent("PokemonTypeIntent",
             }
         }
         
-        response.card({
-			type: "Simple",
-			title: cardTitle, // this is not required for type Simple
-			content: speech
-		})
-		.shouldEndSession(false);	
-
-		return
-		response.say(speech).send();
+        response
+            .card({
+    			type: "Simple",
+    			title: cardTitle, // this is not required for type Simple
+    			content: speech
+    		});		
+		
+		response
+            .say(speech)
+            .shouldEndSession(false)
+            .send();
 	}
 );
 
@@ -196,15 +205,17 @@ app.intent("PokemonNumberIntent",
             }
         }
         
-        response.card({
-			type: "Simple",
-			title: cardTitle, // this is not required for type Simple
-			content: speech
-		})
-		.shouldEndSession(false);	
-
-		return
-		response.say(speech).send();
+        response
+            .card({
+    			type: "Simple",
+    			title: cardTitle, // this is not required for type Simple
+    			content: speech
+    		});		
+	
+		response
+            .say(speech)
+            .shouldEndSession(false)
+            .send();
 	}
 );
 
@@ -224,7 +235,7 @@ app.intent("PokemonEvolutionIntent",
 
         if (itemSlot){ itemName = itemSlot.toLowerCase();  }
         
-        var cardTitle = " Evolution of " + itemName,
+        var cardTitle = "Evolution of " + itemName,
             pokeid = pokes[itemName],
             speechOutput,
             repromptOutput;
@@ -235,7 +246,7 @@ app.intent("PokemonEvolutionIntent",
             try {                
                 json = getApiResponse(HOST_API + '/pokemon/'+ pokeid + '/evolution-chain');                
                 if(json.error){
-                	speech+= ' There was an error getting information of these Pokemon . Try again with another.'
+                	speech+= 'There was an error getting information of these Pokemon . Try again with another.'
                 }else{
                 	speech = itemName
                 	var data = json.data;
@@ -265,7 +276,7 @@ app.intent("PokemonEvolutionIntent",
 	                //speech+= ' evolution chain, has ' + data.length + ' steps';
                 }                
             } catch (err) { // throw err;
-            	speech+= ' There was an error getting information from the Pokemon API. Try again later or try another Pokemon.'
+            	speech+= 'There was an error getting information from the Pokemon API. Try again later or try another Pokemon.'
             }
 
         }else{
@@ -284,16 +295,19 @@ app.intent("PokemonEvolutionIntent",
 		};
 
 		if(poke_evolved){			
-			card.image = {smallImageUrl: pokemonImageFront(poke_evolved.id)};		
+			card.image = 
+            {
+                smallImageUrl: pokemonImageFront(poke_evolved.id),
+                largeImageUrl: pokemonImageFront(poke_evolved.id)
+            };
 		}
 
         response
-        	.card(card)
-			.shouldEndSession(false);	
-
-		return
+        	.card(card)		
+		
 		response
 			.say(speech)
+            .shouldEndSession(false)
 			.send();
 	}
 );
@@ -307,11 +321,11 @@ var getApiResponse = function(url_api){
 }
 
 var pokemonImageFront = function(id){
-	return HOST_API + '/sprites/pokemon/' + id + '.png';
+	return HOST_SPRITES + '/sprites/pokemon/' + id + '.png';
 }
 
 var pokemonImageBack = function(id){
-	return HOST_API + '/sprites/pokemon/back/' + id + '.png';
+	return HOST_SPRITES + '/sprites/pokemon/back/' + id + '.png';
 }
 
 var buildTypeSpeech = function(types){
