@@ -64,7 +64,7 @@ app.intent("PokemonIntent",
         if (itemSlot){ itemName = itemSlot.toLowerCase();  }
         
         var cardTitle = "Information for " + itemName,
-            pokeid = pokes[itemName],
+            pokeid = parseInt(pokes[itemName]),
             speechOutput,
             repromptOutput;
         var speech;
@@ -99,11 +99,11 @@ app.intent("PokemonIntent",
 			text: speech		
 		};
 
-		if(pokeid){			
+		if(pokeid){
             card.image = 
             {
-                smallImageUrl: pokemonImageFront(poke_evolved.id),
-                largeImageUrl: pokemonImageFront(poke_evolved.id)
+                smallImageUrl: pokemonImageFront(pokeid),
+                largeImageUrl: pokemonImageFront(pokeid)
             };
 		}
 
@@ -344,7 +344,7 @@ var buildTypeSpeech = function(types){
         speech+= ' is type ' + poke_types.join(' and ') + '.';
     }else{
     	poke_types_last = poke_types.pop();
-        speech+= ' is type ' + poke_types.join(',') + ' and ' + poke_types_last + '.';
+        speech+= ' is type ' + poke_types.join(', ') + ' and ' + poke_types_last + '.';
     }
 	return speech;
 }
@@ -364,7 +364,7 @@ var buildAbilitiesSpeech = function(abilities){
         speech+= ' has only one ability: ' + poke_abilities.join(',') + '.';
     }else{
     	poke_abilities_last = poke_abilities.pop();
-        speech+= ' has '+ (poke_abilities.length + 1) +' abilites: ' + poke_abilities.join(',') + ' and ' + poke_abilities_last +'.';
+        speech+= ' has '+ (poke_abilities.length + 1) +' abilites: ' + poke_abilities.join(', ') + ' and ' + poke_abilities_last +'.';
     }
     return speech;
 }
