@@ -13,19 +13,18 @@ var APP_ID = process.env.APP_ID;
 app.launch(function(request, response) {
   //response.shouldEndSession(false);
     //return 
+    response        
+        .card("Bienvenido a tu Pokedex","Puedes preguntar informacion acerca de un Pokemon.");        
     response
-        .card("Welcome to the Unofficial Pokedex","You can ask for information about a Pokemon.");
-    response
-        .say("For instructions on what you can say, please say help me.")
+        .say("Para instrucciones de que puedes preguntar, pide ayuda.")        
         .shouldEndSession(false)
         .send();
 });
 
 app.intent("AMAZON.StopIntent",
-	function(request, response){
-		
+	function(request, response){		
 		response
-			.say("Goodbye")
+			.say("Adios")
 			.send();
 	});
 
@@ -33,7 +32,7 @@ app.intent("AMAZON.CancelIntent",
 	function(request, response){
 		
 		response
-			.say("Goodbye")
+			.say("Adios")
 			.send();
 	});
 
@@ -42,7 +41,7 @@ app.intent("AMAZON.HelpIntent",
 	function(request, response){
 		
 		response
-			.say("You can ask for Pokemon information, only says the Pokemon's name... Information for " + Object.keys(pokes).length + " available")
+            .say("Puedes preguntar por informacion de un pokemon, solo di su nombre... Actualmente hay informacion disponible para " + Object.keys(pokes).length + " pokemons")			
 			.shouldEndSession(false)
 			.send();
 	});
@@ -63,32 +62,32 @@ app.intent("PokemonIntent",
 
         if (itemSlot){ itemName = itemSlot.toLowerCase();  }
         
-        var cardTitle = "Information for " + itemName,
+        var cardTitle = "Informacion de " + itemName,
             pokeid = parseInt(pokes[itemName]),
             speechOutput,
             repromptOutput;
         var speech;
 
         if (pokeid) {           
-            	speech = itemName + ' is the Pokemon number ' + pokeid +'.';
+            	speech = itemName + ' es el Pokemon numero ' + pokeid +'.';
             try {                
                 json = getApiResponse(HOST_API + '/pokemon/'+ pokeid);                
                 if(json.error){
-                	speech+= ' There was an error getting information of these Pokemon . Try again with another.'
+                	speech+= 'Hubo un error obteniendo informacion de ese Pokemon. Intenta de nuevo con otro.';
                 }else{
                 	var data = json.data;	               	               	                
-	                speech+= ' And' + buildTypeSpeech(data.types);
-	                speech+= ' And' + buildAbilitiesSpeech(data.abilities);	                
+	                speech+= ' y' + buildTypeSpeech(data.types);
+	                speech+= ' y' + buildAbilitiesSpeech(data.abilities);	                
                 }                
             } catch (err) { //throw err;
-            	speech+= ' There was an error getting information from the Pokemon API. Try again later or try another Pokemon.'
+                speech+= ' Hubo un error obteniendo informacion de la Api de Pokemon. Intenta de nuevo mas tarde o prueba con otro Pokemon.';
             }
 
         }else{
             if (itemName) {
-                speech = "I'm sorry, I currently do not have information for " + itemName + ". What else can I help with?";
+                speech = "Lo siento, actualmente no tengo informacion para " + itemName + ". Con que otra cosa te puedo ayudar?";                
             } else {
-                speech = "I'm sorry, I currently do not know that Pokemon. What else can I help with?";
+                speech = "Lo siento, actualmente no conozco ese Pokemon. Con que mas te puede ayudar?";                
             }
         }
         
@@ -132,7 +131,7 @@ app.intent("PokemonTypeIntent",
 
         if (itemSlot){ itemName = itemSlot.toLowerCase();  }
         
-        var cardTitle = "Pokemon Type of " + itemName,
+        var cardTitle = "Tipo Pokemon de " + itemName,
             pokeid = pokes[itemName],
             speechOutput,
             repromptOutput;
@@ -142,21 +141,21 @@ app.intent("PokemonTypeIntent",
             try {                
                 json = getApiResponse(HOST_API + '/pokemon/'+ pokeid);                
                 if(json.error){
-                	speech+= 'There was an error getting information of these Pokemon . Try again with another.'
+                	speech+= 'Hubo un error obteniendo informacion de ese Pokemon. Intenta de nuevo con otro.';
                 }else{
                 	speech = itemName
                 	var data = json.data;	               	               	                
 	                speech+= ' ' + buildTypeSpeech(data.types);	                
                 }                
             } catch (err) { //throw err;
-            	speech+= 'There was an error getting information from the Pokemon API. Try again later or try another Pokemon.'
+            	speech+= ' Hubo un error obteniendo informacion de la Api de Pokemon. Intenta de nuevo mas tarde o prueba con otro Pokemon.';
             }
 
         }else{
             if (itemName) {
-                speech = "I'm sorry, I currently do not have information for " + itemName + ". What else can I help with?";
+                speech = "Lo siento, actualmente no tengo informacion para " + itemName + ". Con que otra cosa te puedo ayudar?";                
             } else {
-                speech = "I'm sorry, I currently do not know that Pokemon. What else can I help with?";
+                speech = "Lo siento, actualmente no conozco ese Pokemon. Con que mas te puede ayudar?";                
             }
         }
         
@@ -189,19 +188,19 @@ app.intent("PokemonNumberIntent",
 
         if (itemSlot){ itemName = itemSlot.toLowerCase();  }
         
-        var cardTitle = "Pokemon Number of " + itemName,
+        var cardTitle = "Numero de Pokemon de " + itemName,
             pokeid = pokes[itemName],
             speechOutput,
             repromptOutput;
         var speech = '';
 
         if (pokeid) { 
-        	var speech = 'This pokemon is the number ' + pokeid;
+        	var speech = 'Este pokemon es el numero ' + pokeid;
         }else{
             if (itemName) {
-                speech = "I'm sorry, I currently do not have information for " + itemName + ". What else can I help with?";
+                speech = "Lo siento, actualmente no tengo informacion para " + itemName + ". Con que otra cosa te puedo ayudar?";                
             } else {
-                speech = "I'm sorry, I currently do not know that Pokemon. What else can I help with?";
+                speech = "Lo siento, actualmente no conozco ese Pokemon. Con que mas te puede ayudar?";                
             }
         }
         
@@ -235,7 +234,7 @@ app.intent("PokemonEvolutionIntent",
 
         if (itemSlot){ itemName = itemSlot.toLowerCase();  }
         
-        var cardTitle = "Evolution of " + itemName,
+        var cardTitle = "Evolucion de " + itemName,
             pokeid = pokes[itemName],
             speechOutput,
             repromptOutput;
@@ -246,13 +245,13 @@ app.intent("PokemonEvolutionIntent",
             try {                
                 json = getApiResponse(HOST_API + '/pokemon/'+ pokeid + '/evolution-chain');                
                 if(json.error){
-                	speech+= 'There was an error getting information of these Pokemon . Try again with another.'
+                	speech+= 'Hubo un error obteniendo informacion de ese Pokemon. Intenta de nuevo con otro.';
                 }else{
                 	speech = itemName
                 	var data = json.data;
                 	var t = data.length;
                 	if(t <= 1){
-						speech+= ' has no evolution.';
+						speech+= ' no tiene evolucion.';
                 	}else{
                 		var p;
                 		for(i in data){
@@ -265,25 +264,25 @@ app.intent("PokemonEvolutionIntent",
                 		if(p<t){
                 			poke_evolved = data[p];
                 			if(poke_evolved){
-                				speech+= ' evolves in ' + poke_evolved.name;	
+                				speech+= ' evoluciona en ' + poke_evolved.name;	
                 			}else{
-                				speech+= ' evolution not found.';
+                				speech+= ' evolucion no encontrada.';
                 			}                			
                 		}else{
-                			speech+= ' has no evolution.';
+                			speech+= ' no tiene evolucion.';
                 		}
                 	}
 	                //speech+= ' evolution chain, has ' + data.length + ' steps';
                 }                
             } catch (err) { // throw err;
-            	speech+= 'There was an error getting information from the Pokemon API. Try again later or try another Pokemon.'
+            	speech+= ' Hubo un error obteniendo informacion de la Api de Pokemon. Intenta de nuevo mas tarde o prueba con otro Pokemon.';
             }
 
         }else{
             if (itemName) {
-                speech = "I'm sorry, I currently do not have information for " + itemName + ". What else can I help with?";
+                speech = "Lo siento, actualmente no tengo informacion para " + itemName + ". Con que otra cosa te puedo ayudar?";                
             } else {
-                speech = "I'm sorry, I currently do not know that Pokemon. What else can I help with?";
+                speech = "Lo siento, actualmente no conozco ese Pokemon. Con que mas te puede ayudar?";                
             }
         }
         
@@ -338,13 +337,13 @@ var buildTypeSpeech = function(types){
     }
 
 	if(poke_types.length==0){
-        speech+= ' has no type.';
+        speech+= ' no tiene tipo.';
     }else 
     if(poke_types.length==1){
-        speech+= ' is type ' + poke_types.join(' and ') + '.';
+        speech+= ' es tipo ' + poke_types.join(' y ') + '.';
     }else{
     	poke_types_last = poke_types.pop();
-        speech+= ' is type ' + poke_types.join(', ') + ' and ' + poke_types_last + '.';
+        speech+= ' es tipo ' + poke_types.join(', ') + ' y ' + poke_types_last + '.';
     }
 	return speech;
 }
@@ -358,13 +357,13 @@ var buildAbilitiesSpeech = function(abilities){
         poke_abilities.push(abilitie_name);
     }   
 	if(poke_abilities.length==0){
-        speech+= ' has no abilites.';
+        speech+= ' no tiene habilidades.';
     }else 
     if(poke_abilities.length==1){
-        speech+= ' has only one ability: ' + poke_abilities.join(',') + '.';
+        speech+= ' tiene solo una habilidad: ' + poke_abilities.join(',') + '.';
     }else{
     	poke_abilities_last = poke_abilities.pop();
-        speech+= ' has '+ (poke_abilities.length + 1) +' abilites: ' + poke_abilities.join(', ') + ' and ' + poke_abilities_last +'.';
+        speech+= ' tiene '+ (poke_abilities.length + 1) +' habilidades: ' + poke_abilities.join(', ') + ' y ' + poke_abilities_last +'.';
     }
     return speech;
 }
